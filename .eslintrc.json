@@ -1,6 +1,5 @@
 {
   "env": {
-    "browser": true,
     "es2021": true,
     "node": true,
     "jest": true
@@ -18,9 +17,11 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier"
   ],
   "rules": {
+    "prettier/prettier":"error",
     "no-unused-vars": [
       "error",
       {
