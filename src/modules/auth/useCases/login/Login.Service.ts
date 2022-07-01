@@ -3,6 +3,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { ErrorApp } from '~/infra/http/express/ErrorApp';
 import { IUserRepository } from '../../repositories/IUser.Repository';
+import { IUserTokensRepository } from '../../repositories/IUserTokens.Repository';
 
 interface IRequest {
   email: string;
@@ -17,10 +18,12 @@ interface IResponse {
 }
 
 @injectable()
-export class Login {
+export class LoginService {
   constructor(
     @inject('UserRepository')
     private UserRepository: IUserRepository,
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
   ) {}
 
   async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -28,6 +31,10 @@ export class Login {
 
     if (!user) {
       throw new ErrorApp('email or password incorrect');
+    }
+
+    if (!user.isActive) {
+      throw new ErrorApp('user not active');
     }
 
     const passwordConfirm = await compare(password, user.password);
@@ -44,6 +51,8 @@ export class Login {
       subject: user.id,
       expiresIn: '12h',
     });
+
+    await this.userTokensRepository.tokenCreate({ user_id: user.id, token });
 
     return {
       id: user.id,
