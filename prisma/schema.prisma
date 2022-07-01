@@ -49,7 +49,6 @@ model Image {
 model Categorie {
   id   String @id @default(uuid())
   nome String
-
   Product Product[]
 
   @@map("categoria")
