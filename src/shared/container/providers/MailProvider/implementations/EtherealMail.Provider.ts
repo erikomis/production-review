@@ -1,12 +1,13 @@
-import nodemailer, { Transporter } from 'nodemailer';
 import { injectable } from 'tsyringe';
+import nodemailer, { Transporter } from 'nodemailer';
+
 import handlebars from 'handlebars';
 import fs from 'fs';
 
 import { IMailProvider } from '../IMail.Provider';
 
 @injectable()
-class EtherealMailProvider implements IMailProvider {
+export class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor() {
@@ -41,7 +42,7 @@ class EtherealMailProvider implements IMailProvider {
 
     const message = await this.client.sendMail({
       to,
-      from: 'Rentx <noreplay@rentx.com.br>',
+      from: 'production <noreplay@productionreview.com.br>',
       subject,
       html: templateHTML,
     });
@@ -50,5 +51,3 @@ class EtherealMailProvider implements IMailProvider {
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
   }
 }
-
-export { EtherealMailProvider };

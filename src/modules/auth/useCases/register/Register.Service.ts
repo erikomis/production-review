@@ -30,6 +30,7 @@ export class RegisterService {
     if (emailExists) {
       throw new ErrorApp('email on exists');
     }
+
     const passwordHash = await hash(password, 8);
 
     const user = await this.userRepository.UserCreate({
@@ -47,6 +48,7 @@ export class RegisterService {
       user_id: user.id,
       token,
     });
+
     const template = resolve(
       __dirname,
       '..',
