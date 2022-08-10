@@ -1,0 +1,15 @@
+{
+  "verbose": false,
+  "quiet": true,
+  "ignore": [
+    "node_modules/*",
+    "dist/*"
+  ],
+  "watch": [
+    "src"
+  ],
+  "ext": "ts,json,prisma,env",
+  "execMap": {
+    "ts": "node -r @swc-node/register -r @swc-node/sourcemap-support -r tsconfig-paths/register"
+  }
+}

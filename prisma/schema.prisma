@@ -9,3 +9,71 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model User {
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  isActive    Boolean       @default(false)
+  isAdmin     Boolean       @default(false)
+  avatar      Avatar[]
+  User_tokens User_tokens[]
+}
+
+model Avatar {
+  id      String @id @default(uuid())
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+  name    String
+
+}
+
+model User_tokens {
+  id      String @id @default(uuid())
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+  token   String
+
+  @@map("user_tokens")
+}
+
+model Image {
+  id        String    @id @default(uuid())
+  file_name String
+  Product   Product[]
+
+  @@map("image")
+}
+
+model Categorie {
+  id   String @id @default(uuid())
+  nome String
+  Product Product[]
+
+  @@map("categoria")
+}
+
+model Product {
+  id             String    @id @default(uuid())
+  nome_descricao String
+  categoria_id   String
+  categoria      Categorie @relation(fields: [categoria_id], references: [id])
+  image_id       String
+  image          Image     @relation(fields: [image_id], references: [id])
+
+
+  Comentario Comentario[]
+  @@map("product")
+}
+
+model Comentario {
+  id         String  @id @default(uuid())
+  titulo     String
+  descricao  String
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+
+  @@map("comentario")
+}
